@@ -19,6 +19,7 @@ The primary purpose of these scripts is to streamline the process of setting up 
 - For Windows users, Git Bash or a similar Bash environment is recommended.
 
 ### How To
+
 Simply run script generate_compose.sh(or .ps1 on windows)
 - you cloud accept auto strep witch will call (http://ollama:$port/api/pull [POST] body: {model=modelName(ex:llama3.2)})
 
@@ -45,3 +46,8 @@ liste of Ollama models: [Ollama models](https://ollama.com/search)
 
 - [CrewAI Studio (GitHub)](https://github.com/strnad/CrewAI-Studio)
 - [Ollama](https://ollama.com/)
+
+
+### Update to newer versino of CrewAI-Studio
+
+if you want force the update to thelastest version of CrewAI-Studio, delete the CrewAI-Studio image from your docker images this will force the script to clone and build the lastest version
