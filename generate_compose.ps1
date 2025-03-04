@@ -35,6 +35,7 @@ $composeContent = @"
 services:
   ollama:
     image: ollama/ollama:latest
+    restart: unless-stopped
     ports:
       - "11434:11434"
     volumes:
@@ -64,6 +65,7 @@ $composeContent += @"
 
   postgres-db:
     image: postgres:latest
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -75,6 +77,7 @@ $composeContent += @"
     
   crewai-studio:
     image: crewai-studio
+    restart: unless-stopped
     ports:
       - "8501:8501"
     volumes:
@@ -100,27 +103,5 @@ Write-Output "Fichier docker-compose.yaml généré avec succès !"
 
 $confirmation = Read-Host "Voulez-vous lancer les conteneurs Docker et télécharger les models ? (y/n)"
 if ($confirmation -eq 'y') {
-    
-  # Lancer docker-compose en arrière-plan
-  docker-compose up -d
-
-  # Attendre 10 secondes pour s'assurer que tous les conteneurs sont démarrés
-  Write-Output "Attente de 10 secondes pour s'assurer que tous les conteneurs sont démarrés..."
-  Start-Sleep -Seconds 10
-
-  # Envoyer une requête HTTP POST pour chaque modèle
-  $port = 11434
-  $queryUrl = "http://localhost:$port/api/pull"
-
-  for ($index = 0; $index -lt $INSTANCES.Length; $index++) {
-      $instance = $INSTANCES[$index] -replace "`r",""
-      $queryBody = [PSCustomObject]@{model=$instance} | ConvertTo-Json
-
-      Write-Output "Téléchargement du modèle: $instance"
-
-      # Envoyer la requête POST
-      Invoke-RestMethod -Uri $queryUrl -Method Post -ContentType "application/json" -Body $queryBody
-  }
-
-  Write-Output "Initialisation des conteneurs terminée."
+    ./start_compose.ps1
 }
