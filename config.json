@@ -1,7 +1,7 @@
 {
   "INSTANCES": ["mistral:7b", "codestral:22b-v0.1-q3_K_S", "llava-llama3"],
-  "GPUS_COUNT": 1,
-  "SHARED_PATH_HOST": "C:/Share/crew",
+  "GPUS_COUNT": 0,
+  "SHARED_PATH_HOST": "C:/Shared/crew",
   "CUSTOM_API_KEY": "ApiKey123",
   "POSTGRES_USER": "crewaiuser",
   "POSTGRES_PASSWORD": "secret123",
