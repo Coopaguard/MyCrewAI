@@ -5,3 +5,7 @@
 /.vs
 ./docker-compose.yaml
 docker-compose.yaml
+./jq.exe
+*/bin
+*/obj
+*/.vs

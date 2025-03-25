@@ -1,9 +1,12 @@
 {
-  "INSTANCES": ["mistral:7b", "codestral:22b-v0.1-q3_K_S", "llava-llama3"],
+  "INSTANCES": ["mistral-small", "codestral:22b-v0.1-q3_K_S", "llava-llama3"],
   "GPUS_COUNT": 0,
-  "SHARED_PATH_HOST": "C:/Shared/crew",
-  "CUSTOM_API_KEY": "ApiKey123",
+  "SHARED_PATH_HOST": "C:/shared",
+  "CUSTOM_API_KEY": "",
   "POSTGRES_USER": "crewaiuser",
   "POSTGRES_PASSWORD": "secret123",
-  "POSTGRES_DB": "crewai"
+  "POSTGRES_DB": "crewai",
+  "WEBUI_DOCKER_TAG": "",
+  "OPEN_WEBUI_PORT": "",
+  "RESTART_OPTION": "unless-stopped"
 }
