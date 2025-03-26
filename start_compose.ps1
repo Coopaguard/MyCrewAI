@@ -15,7 +15,7 @@ if (-not (Test-Path -Path $SHARED_PATH_HOST)) {
 docker-compose up -d
 
 # Attendre 10 secondes pour s'assurer que tous les conteneurs sont démarrés
-Write-Output "Attente de 10 secondes pour s'assurer que tous les conteneurs sont démarrés..."
+Write-Output "Attente de 10 secondes pour s'assurer que tous les conteneurs sont demarres..."
 Start-Sleep -Seconds 10
 
 # Envoyer une requête HTTP POST pour chaque modèle
@@ -26,10 +26,10 @@ for ($index = 0; $index -lt $INSTANCES.Length; $index++) {
     $instance = $INSTANCES[$index] -replace "`r",""
     $queryBody = [PSCustomObject]@{model=$instance} | ConvertTo-Json
 
-    Write-Output "Téléchargement du modèle: $instance"
+    Write-Output "Telechargement du modele: $instance"
 
     # Envoyer la requête POST
     Invoke-RestMethod -Uri $queryUrl -Method Post -ContentType "application/json" -Body $queryBody
 }
 
-Write-Output "Initialisation des conteneurs terminée."
+Write-Output "Initialisation des conteneurs terminee."

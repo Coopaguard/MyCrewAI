@@ -9,4 +9,4 @@ docker-compose.yaml
 */bin
 */obj
 */.vs
-init-database.sql
+init-user-db.sh

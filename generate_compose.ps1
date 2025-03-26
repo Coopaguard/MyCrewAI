@@ -7,9 +7,12 @@ $GPU_INSTANCES = $configJson.GPU_INSTANCES;
 $GPUS_COUNT = $configJson.GPUS_COUNT;
 $SHARED_PATH_HOST = $configJson.SHARED_PATH_HOST;
 $CUSTOM_API_KEY = $configJson.CUSTOM_API_KEY;
-$POSTGRES_USER = $configJson.CREWAI_POSTGRES_USER;
-$POSTGRES_PASSWORD = $configJson.CREWAI_POSTGRES_PASSWORD;
-$POSTGRES_DB = $configJson.CREWAI_POSTGRES_DB;
+$POSTGRES_USER = $configJson.POSTGRES_USER;
+$POSTGRES_PASSWORD = $configJson.POSTGRES_PASSWORD;
+$CREWAI_DB = $configJson.CREWAI_POSTGRES_DB;
+$WEBUI_DB = $configJson.OPENWEBUI_POSTGRES_DB;
+$WEBUI_USER = $configJson.OPENWEBUI_POSTGRES_USER;
+$WEBUI_PASSWORD = $configJson.OPENWEBUI_POSTGRES_PASSWORD;
 $RESTART = $configJson.RESTART_OPTION;
 $WEBUI_DOCKER_TAG = "main";
 if ($configJson.WEBUI_DOCKER_TAG -ne "") {
@@ -82,12 +85,12 @@ if ($GPUS_COUNT -gt 0) {
 $composeContent += @"
 
   postgres-db:
-    image: postgres:latest
+    image: ostgres:latest
     restart: ${RESTART}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DB: ${CREWAI_DB}
     ports:
       - "5432:5432"
     volumes:
@@ -96,12 +99,11 @@ $composeContent += @"
 if ($confirmationUI -eq 'y') {
   $composeContent += @"
 
-      - ./init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
+      - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
 
 "@
 } else {
   $composeContent += @"
-
 
 "@
 }
@@ -116,7 +118,7 @@ $composeContent += @"
     volumes:
       - crewai-data:/data
     environment:
-      - DB_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-db:5432/${POSTGRES_DB}
+      - DB_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-db:5432/${CREWAI_DB}
       - OLLAMA_HOST=http://ollama:11434
       - OLLAMA_MODELS=$(($INSTANCES | ForEach-Object { "ollama/$_" }) -join ',')
     depends_on:
@@ -127,15 +129,11 @@ $composeContent += @"
 
 # Add Open Web UI
 if ($confirmationUI -eq 'y') {
-  $pguser = $configJson.OPENWEB_POSTGRES_USER;
-  $pgpwd = $configJson.OPENWEB_POSTGRES_PASSWORD;
-  $pgdb = $configJson.OPENWEB_POSTGRES_db;
-
     $composeContent += @"
   open-webui:
     image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG}
     volumes:
-      - open-webui:/app/backend/data
+      - openwebui-data:/app/backend/data
     depends_on:
       - ollama
       - postgres-db
@@ -145,14 +143,13 @@ if ($confirmationUI -eq 'y') {
       - OLLAMA_API_BASE_URL=http://ollama:11434
       - OLLAMA_API_URL=http://ollama:11434
       - WEBUI_SECRET_KEY=
-      - DATABASE_URL=postgresql://${pguser}:${pgpwd}@postgres-db:5432/${pgdb}
-    extra_hosts:
-      - host.docker.internal:host-gateway
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-db:5432/${WEBUI_DB}
     restart: ${RESTART}
 "@
 }
 
 $composeContent += @"
+
 
 volumes:
   ollama:
@@ -162,7 +159,7 @@ volumes:
 if ($confirmationUI -eq 'y') {
   $composeContent += @"
 
-  open-webui:
+  openwebui-data:
 "@
 }
 
@@ -172,17 +169,17 @@ $composeContent | Out-File -FilePath docker-compose.yaml -Encoding utf8
 
 # création du fichier de configuration supplémentaire
 if ($confirmationUI -eq 'y') {
-  $pguser = $configJson.OPENWEB_POSTGRES_USER;
-  $pgpwd = $configJson.OPENWEB_POSTGRES_PASSWORD;
-  $pgdb = $configJson.OPENWEB_POSTGRES_db;
 
   $composeSqlPG = @"
-CREATE USER $pguser WITH PASSWORD '$pgpwd';
-CREATE DATABASE $pgdb;
-GRANT ALL PRIVILEGES ON DATABASE $pgdb TO $pguser;
+#!/bin/bash
+psql -v ON_ERROR_STOP=1 --username "${POSTGRES_USER}" --dbname postgres <<-EOSQL
+	CREATE USER ${WEBUI_USER} WITH PASSWORD '$WEBUI_PASSWORD';
+	CREATE DATABASE ${WEBUI_DB};
+	GRANT ALL PRIVILEGES ON DATABASE ${WEBUI_DB} TO ${WEBUI_USER};
+EOSQL
 "@
 
-$composeSqlPG | Out-File -FilePath init-database.sql -Encoding utf8
+$composeSqlPG | Out-File -FilePath init-user-db.sh -Encoding utf8
 }
 
 Write-Output "Fichier docker-compose.yaml genere avec succes !"
