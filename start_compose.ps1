@@ -1,13 +1,13 @@
 # Lire le fichier config.json
 $configJson = Get-Content -Raw -Path config.json | ConvertFrom-Json
-$SHARED_PATH_HOST = [IO.Path]::Combine($configJson.SHARED_PATH_HOST, "input")
+$SHARED_PATH_HOST = $configJson.SHARED_PATH_HOST
 
 
 # Créer les dossier input et output s'ils n'éxiste pas
 # if (-not (Test-Path -Path $SHARED_PATH_HOST_INPUT)) {
 #     New-Item -ItemType Directory -Force -Path $SHARED_PATH_HOST_INPUT
 # }
-if (-not (Test-Path -Path $SHARED_PATHSHARED_PATH_HOST_HOST_OUTPUT)) {
+if (-not (Test-Path -Path $SHARED_PATH_HOST)) {
     New-Item -ItemType Directory -Force -Path $SHARED_PATH_HOST
 }
 

@@ -134,9 +134,6 @@ if ($confirmationUI -eq 'y') {
     $composeContent += @"
   open-webui:
     image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG}
-    environment:
-      - OLLAMA_API_BASE_URL=http://ollama:11434
-      - OLLAMA_API_URL=http://ollama:11434
     volumes:
       - open-webui:/app/backend/data
     depends_on:
@@ -145,7 +142,8 @@ if ($confirmationUI -eq 'y') {
     ports:
       - ${WEBUI_PORT}:8080
     environment:
-      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_API_BASE_URL=http://ollama:11434
+      - OLLAMA_API_URL=http://ollama:11434
       - WEBUI_SECRET_KEY=
       - DATABASE_URL=postgresql://${pguser}:${pgpwd}@postgres-db:5432/${pgdb}
     extra_hosts:
