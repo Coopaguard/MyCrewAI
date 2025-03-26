@@ -85,7 +85,7 @@ if ($GPUS_COUNT -gt 0) {
 $composeContent += @"
 
   postgres-db:
-    image: ostgres:latest
+    image: postgres:latest
     restart: ${RESTART}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
