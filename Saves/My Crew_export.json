@@ -1,94 +1,152 @@
-{
-  "id": "C_O2iKRX8c",
-  "name": "My Crew",
-  "process": "hierarchical",
-  "verbose": true,
-  "memory": true,
-  "cache": true,
-  "max_rpm": 1000,
-  "manager_llm": null,
-  "manager_agent": "A_af3YQ7nl",
-  "created_at": "2025-03-04T13:08:05.197566",
-  "agents": [
-    {
-      "id": "A_4D1T5Bet",
-      "role": "UI Inventors",
-      "backstory": "Senior UX/UI Designer creating most fulent interface",
-      "goal": "precisely describe user interfaces to make them as easy to use as possible",
-      "allow_delegation": false,
-      "verbose": false,
-      "cache": true,
-      "llm_provider_model": "Ollama: ollama/mistral:7b",
-      "temperature": 0.1,
-      "max_iter": 3,
-      "tool_ids": [
-        "hLQhVfPS",
-        "HLwD311R"
-      ]
-    },
-    {
+[
+  {
+      "id": "hLQhVfPS",
+      "entity_type": "tool",
+      "data": {
+          "name": "FileReadTool",
+          "description": "A tool that can be used to read a file's content.",
+          "parameters": {
+              "file_path": null
+          }
+      }
+  },
+  {
       "id": "A_XEKTh17p",
-      "role": "Senior Developper",
-      "backstory": "Senior developper intersted by every new techs.",
-      "goal": "Create modern solution architectures and code all the functionalities required in these applications",
-      "allow_delegation": false,
-      "verbose": false,
-      "cache": true,
-      "llm_provider_model": "Ollama: ollama/codestral:22b-v0.1-q3_K_S",
-      "temperature": 0.1,
-      "max_iter": 4,
-      "tool_ids": [
-        "hLQhVfPS",
-        "GkyPm98Q",
-        "HLwD311R",
-        "C1g3Hv5l"
-      ]
-    }
-  ],
-  "tasks": [
-    {
+      "entity_type": "agent",
+      "data": {
+          "created_at": "2025-03-26T21:29:37.283282",
+          "role": "Senior Developper",
+          "backstory": "Senior developper intersted by every new techs.",
+          "goal": "Create modern solution architectures and code all the functionalities required in these applications",
+          "allow_delegation": false,
+          "verbose": false,
+          "cache": true,
+          "llm_provider_model": "Ollama: ollama/codestral:22b-v0.1-q3_K_S",
+          "temperature": 0.1,
+          "max_iter": 4,
+          "tool_ids": [
+              "hLQhVfPS",
+              "GkyPm98Q",
+              "HLwD311R",
+              "C1g3Hv5l"
+          ],
+          "knowledge_source_ids": []
+      }
+  },
+  {
+      "id": "A_rR9lKwd6",
+      "entity_type": "agent",
+      "data": {
+          "created_at": "2025-03-26T21:30:20.257451",
+          "role": "Prompt manager",
+          "backstory": "With extensive experience managing software development projects, having successfully overseen numerous projects across various industries. It possesses a strong technical understanding of application development technologies, including programming languages, frameworks, and development tools. The agent excels in communicating effectively with team members, stakeholders, and clients, ensuring clear alignment on goals and expectations. It is proficient in Agile and Scrum methodologies, leveraging these approaches to enhance project efficiency and quality. Additionally, the agent is skilled in analyzing data and performance metrics to identify areas for improvement and make data-driven decisions.",
+          "goal": "Aims to optimize development processes to increase efficiency and reduce delivery times. It is committed to delivering high-quality applications that meet user needs and market requirements. The agent focuses on fostering the professional development of team members through training and mentorship. Maintaining open communication with clients to ensure their expectations are met and feedback is incorporated is a key priority. Furthermore, the agent promotes a culture of innovation within the team, encouraging experimentation and the adoption of new technologies.",
+          "allow_delegation": true,
+          "verbose": true,
+          "cache": true,
+          "llm_provider_model": "Ollama: ollama/mistral-small",
+          "temperature": 0.1,
+          "max_iter": 7,
+          "tool_ids": [
+              "hLQhVfPS",
+              "HLwD311R",
+              "GkyPm98Q"
+          ],
+          "knowledge_source_ids": []
+      }
+  },
+  {
+      "id": "A_4D1T5Bet",
+      "entity_type": "agent",
+      "data": {
+          "created_at": "2025-03-26T21:29:37.282310",
+          "role": "UI Inventors",
+          "backstory": "Senior UX/UI Designer creating most fulent interface",
+          "goal": "precisely describe user interfaces to make them as easy to use as possible",
+          "allow_delegation": false,
+          "verbose": false,
+          "cache": true,
+          "llm_provider_model": "Ollama: ollama/mistral-small",
+          "temperature": 0.1,
+          "max_iter": 3,
+          "tool_ids": [
+              "HLwD311R",
+              "hLQhVfPS"
+          ],
+          "knowledge_source_ids": []
+      }
+  },
+  {
+      "id": "HLwD311R",
+      "entity_type": "tool",
+      "data": {
+          "name": "DirectoryReadTool",
+          "description": "Use the tool to list the contents of the specified directory",
+          "parameters": {
+              "directory_contents": "/share"
+          }
+      }
+  },
+  {
+      "id": "GkyPm98Q",
+      "entity_type": "tool",
+      "data": {
+          "name": "CustomFileWriteTool",
+          "description": "A tool that can be used to write a file to a specific folder.",
+          "parameters": {
+              "base_folder": "/shared",
+              "filename": null
+          }
+      }
+  },
+  {
+      "id": "C_O2iKRX8c",
+      "entity_type": "crew",
+      "data": {
+          "name": "My Crew",
+          "process": "hierarchical",
+          "verbose": true,
+          "agent_ids": [
+              "A_4D1T5Bet",
+              "A_XEKTh17p",
+              "A_rR9lKwd6"
+          ],
+          "task_ids": [
+              "T_G4pAnSrX"
+          ],
+          "memory": true,
+          "cache": true,
+          "planning": true,
+          "max_rpm": 1000,
+          "manager_llm": null,
+          "manager_agent_id": "A_rR9lKwd6",
+          "created_at": "2025-03-04T13:08:05.197566",
+          "knowledge_source_ids": []
+      }
+  },
+  {
       "id": "T_G4pAnSrX",
-      "description": "Objective:\nCreate a Single Page Application (SPA) in Vue.js for an online accommodation booking site (la-perrine.fr). The application should allow a family group to book accommodations and manage reservations.\n\nTasks to Complete:\n\nInitial Setup:\n\nSet up a Vue.js project with Vue CLI.\nConfigure routing with Vue Router for different pages.\nCreate a mock data service to simulate the API.\nNavigation Menu:\n\nImplement a left-side navigation menu for logged-in users to navigate through the site.\nLogin Page:\n\nCreate a login form.\nImplement user authentication (simulated for now).\nManage user sessions.\nReservation Viewing Page:\n\nDisplay the list of reservations.\nAllow making a new reservation.\nCalculate and display reservation fees (5 \u20ac per night per person).\nReservation Modification Page:\n\nAllow modifying the number of people present per night.\nAllow deleting a reservation.\nAllow modifying the reservation period.\nImplement reservation validation (locking and pending payment).\nStatistics Page:\n\nDisplay annual revenue.\nDisplay the number of overnight stays.\nDisplay the number of reservations.\nUser Information Page:\n\nAllow the user to modify personal information (email, first name, password).\nContact Page:\n\nCreate a form to send an email to one or more users.\nSimulate email sending (pending API integration).\nRegistration Page:\n\nCreate a registration form with fields: Email, First Name, Representative (First Name of an existing user).\nManage account creation requests.\nAccounting Page:\n\nCreate a page to validate the payment of reservations awaiting payment.\nEnsure this page is only visible to users with the first name \"Jules.\"\nList all reservations awaiting validation, grouped by the reservation holder's first name.\nEco-Design Rules:\n\nEnsure the site respects common eco-design rules, such as optimizing performance, reducing data usage, and minimizing environmental impact.\nDesign and Styling:\n\nUse a base color scheme of white cass\u00e9 for the background, black for all texts and separators, and dark emerald green for highlights.\nTesting and Validation:\n\nWrite unit tests for each component.\nValidate the application's functionality with mock data.\nDocumentation:\n\nDocument the code and features.\nProvide a user guide for end-users.\nNotes:\n\nEach task should be independent and separately achievable.\nThe application should be designed for easy integration with a real API in the future.\nEnsure the user interface is intuitive and responsive.",
-      "expected_output": "a directory containing every files required to the booking web site.",
-      "async_execution": true,
-      "agent_id": "A_af3YQ7nl",
-      "context_from_async_tasks_ids": null,
-      "created_at": "2025-03-04T13:05:53.563878"
-    }
-  ],
-  "tools": [
-    {
-      "tool_id": "HLwD311R",
-      "name": "DirectoryReadTool",
-      "description": "Use the tool to list the contents of the specified directory",
-      "parameters": {
-        "directory_contents": "/share/input"
+      "entity_type": "task",
+      "data": {
+          "description": "Objective:\nCreate a Single Page Application (SPA) in Vue.js for an online accommodation booking site (la-perrine.fr). The application should allow a family group to book accommodations and manage reservations.\n\nTasks to Complete:\n\nInitial Setup:\n\nSet up a Vue.js project with Vue CLI.\nConfigure routing with Vue Router for different pages.\nCreate a mock data service to simulate the API.\nNavigation Menu:\n\nImplement a left-side navigation menu for logged-in users to navigate through the site.\nLogin Page:\n\nCreate a login form.\nImplement user authentication (simulated for now).\nManage user sessions.\nReservation Viewing Page:\n\nDisplay the list of reservations.\nAllow making a new reservation.\nCalculate and display reservation fees (5 \u20ac per night per person).\nReservation Modification Page:\n\nAllow modifying the number of people present per night.\nAllow deleting a reservation.\nAllow modifying the reservation period.\nImplement reservation validation (locking and pending payment).\nStatistics Page:\n\nDisplay annual revenue.\nDisplay the number of overnight stays.\nDisplay the number of reservations.\nUser Information Page:\n\nAllow the user to modify personal information (email, first name, password).\nContact Page:\n\nCreate a form to send an email to one or more users.\nSimulate email sending (pending API integration).\nRegistration Page:\n\nCreate a registration form with fields: Email, First Name, Representative (First Name of an existing user).\nManage account creation requests.\nAccounting Page:\n\nCreate a page to validate the payment of reservations awaiting payment.\nEnsure this page is only visible to users with the first name \"Jules.\"\nList all reservations awaiting validation, grouped by the reservation holder's first name.\nEco-Design Rules:\n\nEnsure the site respects common eco-design rules, such as optimizing performance, reducing data usage, and minimizing environmental impact.\nDesign and Styling:\n\nUse a base color scheme of white cass\u00e9 for the background, black for all texts and separators, and dark emerald green for highlights.\nTesting and Validation:\n\nWrite unit tests for each component.\nValidate the application's functionality with mock data.\nDocumentation:\n\nDocument the code and features.\nProvide a user guide for end-users.\nNotes:\n\nEach task should be independent and separately achievable.\nThe application should be designed for easy integration with a real API in the future.\nEnsure the user interface is intuitive and responsive.",
+          "expected_output": "a working project in vue JS",
+          "async_execution": false,
+          "agent_id": "A_rR9lKwd6",
+          "context_from_async_tasks_ids": [],
+          "context_from_sync_tasks_ids": [],
+          "created_at": "2025-03-04T13:05:53.563878"
       }
-    },
-    {
-      "tool_id": "hLQhVfPS",
-      "name": "FileReadTool",
-      "description": "A tool that can be used to read a file's content.",
-      "parameters": {
-        "file_path": null
+  },
+  {
+      "id": "mHe4fgZL",
+      "entity_type": "tool",
+      "data": {
+          "name": "DirectorySearchTool",
+          "description": "A tool that can be used to semantic search a query from a directory's content.",
+          "parameters": {
+              "directory_path": null,
+              "directory": "/shared"
+          }
       }
-    },
-    {
-      "tool_id": "GkyPm98Q",
-      "name": "CustomFileWriteTool",
-      "description": "A tool that can be used to write a file to a specific folder.",
-      "parameters": {
-        "base_folder": "/shared/Write",
-        "filename": null
-      }
-    },
-    {
-      "tool_id": "C1g3Hv5l",
-      "name": "DirectoryReadTool",
-      "description": "Use the tool to list the contents of the specified directory",
-      "parameters": {
-        "directory_contents": "/shared/output"
-      }
-    }
-  ]
-}
+  }
+]
