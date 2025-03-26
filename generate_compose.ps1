@@ -127,6 +127,10 @@ $composeContent += @"
 
 # Add Open Web UI
 if ($confirmationUI -eq 'y') {
+  $pguser = $configJson.OPENWEB_POSTGRES_USER;
+  $pgpwd = $configJson.OPENWEB_POSTGRES_PASSWORD;
+  $pgdb = $configJson.OPENWEB_POSTGRES_db;
+
     $composeContent += @"
   open-webui:
     image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG}
@@ -143,7 +147,7 @@ if ($confirmationUI -eq 'y') {
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - WEBUI_SECRET_KEY=
-      - DATABASE_URL=postgresql://openwebui:password@1Panel-postgresql-DMNz:5432/openwebui
+      - DATABASE_URL=postgresql://${pguser}:${pgpwd}@postgres-db:5432/${pgdb}
     extra_hosts:
       - host.docker.internal:host-gateway
     restart: ${RESTART}
