@@ -15,8 +15,12 @@ $WEBUI_USER = $configJson.OPENWEBUI_POSTGRES_USER;
 $WEBUI_PASSWORD = $configJson.OPENWEBUI_POSTGRES_PASSWORD;
 $RESTART = $configJson.RESTART_OPTION;
 $WEBUI_DOCKER_TAG = "main";
-if ($configJson.WEBUI_DOCKER_TAG -ne "") {
-  $WEBUI_DOCKER_TAG = $configJson.WEBUI_DOCKER_TAG;
+if ($configJson.OPENWEBUI_DOCKER_TAG -ne "") {
+  $WEBUI_DOCKER_TAG = $configJson.OPENWEBUI_DOCKER_TAG;
+}
+$WEBUI_AUTH = "False";
+if ($configJson.OPENWEBUI_AUTH -ne "False") {
+  $WEBUI_AUTH = "True";
 }
 $WEBUI_PORT = "3000";
 if ($configJson.OPEN_WEBUI_PORT -ne "") {
@@ -85,7 +89,7 @@ if ($GPUS_COUNT -gt 0) {
 $composeContent += @"
 
   postgres-db:
-    image: postgres:latest
+    image: pgvector/pgvector:pg17
     restart: ${RESTART}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -142,8 +146,9 @@ if ($confirmationUI -eq 'y') {
     environment:
       - OLLAMA_API_BASE_URL=http://ollama:11434
       - OLLAMA_API_URL=http://ollama:11434
-      - WEBUI_SECRET_KEY=
+      - WEBUI_SECRET_KEY=${CUSTOM_API_KEY}
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-db:5432/${WEBUI_DB}
+      - WEBUI_AUTH=${WEBUI_AUTH}
     restart: ${RESTART}
 "@
 }
@@ -176,6 +181,8 @@ psql -v ON_ERROR_STOP=1 --username "${POSTGRES_USER}" --dbname postgres <<-EOSQL
 	CREATE USER ${WEBUI_USER} WITH PASSWORD '$WEBUI_PASSWORD';
 	CREATE DATABASE ${WEBUI_DB};
 	GRANT ALL PRIVILEGES ON DATABASE ${WEBUI_DB} TO ${WEBUI_USER};
+  \c openwebui
+  CREATE EXTENSION vector;
 EOSQL
 "@
 
